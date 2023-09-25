@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link
+        href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
+        rel="stylesheet">
+
+    <title>MANGO SCAN APPS</title>
+
+
+    <!--
+
+TemplateMo 548 Training Studio
+
+https://templatemo.com/tm-548-training-studio
+
+-->
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/templatemo-training-studio.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Button</title>
+    <style>
+        /* เพิ่มสไตล์ให้กับปุ่ม */
+        button {
+            background-color: #9b2d2da9;
+            /* สีพื้นหลังปุ่ม */
+            color: #fff;
+            /* สีข้อความภายในปุ่ม */
+            border: none;
+            /* ไม่มีเส้นขอบ */
+            border-radius: 20px;
+            /* รูปร่างของมุมปุ่ม */
+            padding: 20px 40px;
+            /* ขอบข้อมูลรอบตัวหนังสือ */
+            font-size: 25px;
+            /* ขนาดตัวหนังสือ */
+            cursor: pointer;
+            /* สลับเป็น cursor ประเภท pointer เมื่อนำเมาส์ไปชี้ที่ปุ่ม */
+            transition: background-color 0.3s ease;
+            /* เพิ่มการเปลี่ยนสีพื้นหลังเมื่อโฮเวอร์ */
+        }
+
+        /* เพิ่มสไตล์เมื่อโฮเวอร์ปุ่ม (hover) */
+        #startButton:hover {
+            background-color: #379734;
+            /* เปลี่ยนสีพื้นหลังเมื่อโฮเวอร์ */
+        }
+    </style>
+
+<style>
+    body {
+        background-image: url('assets/images/MG.jpg'); /* เปลี่ยนเป็น URL ของรูปภาพพื้นหลังของคุณ */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* ทำให้รูปภาพติดตามการเลื่อนลง */
+    }
+</style>
+
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">MANGO SCAN<em>.com</em></a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="index.html" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="SCANMODEL.html" >SCAN</a></li>
+                            <li class="scroll-to-section"><a href="page1.html">About</a></li>
+                            <li class="scroll-to-section"><a href="page2.html">Classes</a></li>
+
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <!-- ***** Main Banner Area Start ***** -->
+    <div class="main-banner" id="top">
+        <img src="assets/images/MG.jpg" type="images" />
+
+
+        <div class="caption">
+            <h2><em style="color: rgb(44, 42, 42);">MANGO SCAN</em> <em>Apps.</em></h2>
+            <a href=" ">
+                <h4>Back
+            </a> </h4>
+            <button type="button" id="startButton" onclick="startWork()">
+                <h4>Start</h4>
+            </button>
+            <button type="button" id="stopButton" style="display: none;" onclick="stopWork()">
+                <h4>Stop</h4>
+            </button>
+            <div id="webcam-container"></div>
+            <div id="label-container"></div>
+            <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+            <script type="text/javascript">
+                // More API functions here:
+                // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+                // the link to your model provided by Teachable Machine export panel
+                const URL = "https://teachablemachine.withgoogle.com/models/2yc1EFuiB/";
+
+                let model, webcam, labelContainer, maxPredictions;
+
+                // Load the image model and setup the webcam
+                async function init() {
+                    const modelURL = URL + "model.json";
+                    const metadataURL = URL + "metadata.json";
+
+                    // load the model and metadata
+                    // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+                    // or files from your local hard drive
+                    // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+                    model = await tmImage.load(modelURL, metadataURL);
+                    maxPredictions = model.getTotalClasses();
+
+                    // Convenience function to setup a webcam
+                    const flip = true; // whether to flip the webcam
+                    webcam = new tmImage.Webcam(1000, 400, flip); // width, height, flip
+                    await webcam.setup(); // request access to the webcam
+                    await webcam.play();
+                    window.requestAnimationFrame(loop);
+
+                    // Check if maxPredictions has not been set yet
+                    // if (!maxPredictions) {
+                    // maxPredictions = 10; // ค่า Max ตั้งค่าเริ่มต้นเป็น 10 หรือค่าอื่นตามที่คุณต้องการ
+                    //  }
+
+                    // append elements to the DOM
+                    document.getElementById("webcam-container").appendChild(webcam.canvas);
+                    labelContainer = document.getElementById("label-container");
+                    for (let i = 0; i < maxPredictions; i++) {
+                        const labelElement = document.createElement("div");
+                        labelElement.style.marginBottom = "10px";
+                        labelElement.style.fontSize = "24px";
+                        labelElement.style.color = "white";
+                        labelElement.onclick = function () {
+                            window.open("http://localhost:52330/templatemo_548_training_studio/templatemo_548_training_studio/page1.html", "_blank");
+                        };
+
+                        // เพิ่มข้อมูลการตรวจจับวัตถุลงในข้อความ
+                        labelElement.textContent = "Object " + i; // แสดงข้อมูลการตรวจจับวัตถุแทน
+
+                        labelContainer.appendChild(labelElement);
+                    }
+
+                }
+
+                async function loop() {
+                    webcam.update(); // update the webcam frame
+                    await predict();
+                    window.requestAnimationFrame(loop);
+                }
+
+                // run the webcam image through the image model
+                async function predict() {
+                    // predict can take in an image, video, or canvas HTML element
+                    const prediction = await model.predict(webcam.canvas);
+
+                    let maxPrediction = -Infinity;
+                    let maxClassName = "";
+
+                    // Find the class with the highest probability
+                    for (let i = 0; i < prediction.length; i++) {
+                        if (prediction[i].probability > maxPrediction) {
+                            maxPrediction = prediction[i].probability;
+                            maxClassName = prediction[i].className;
+                        }
+                    }
+
+                    // Display the class with the highest probability
+                    const classPrediction = `${maxClassName}: ${maxPrediction.toFixed(2)}`;
+
+                    // Clear any previous predictions
+                    labelContainer.innerHTML = "";
+
+                    // Create a new element for the prediction
+                    const predictionElement = document.createElement("div");
+                    predictionElement.innerHTML = classPrediction;
+
+                    // Style the prediction element as needed
+                    predictionElement.style.fontSize = "24px";
+                    predictionElement.style.fontWeight = "bold";
+                    predictionElement.style.color = "back";
+                    predictionElement.style.backgroundColor = "white";
+                    predictionElement.onclick = function () {
+                        window.open("http://localhost:52330/templatemo_548_training_studio/templatemo_548_training_studio/page1.html", "_blank");
+                    };
+
+                    // Append the prediction element to the label container
+                    labelContainer.appendChild(predictionElement);
+                }
+
+            </script>
+
+
+        </div>
+    </div>
+    </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+
+    <div id="webcam-container">
+        <!-- Your webcam canvas will be appended here -->
+    </div>
+    <div id="label-container" class="label-container">
+        <!-- Your label divs will be appended here -->
+    </div>
+
+    <div class="model" id="metadata">
+        <!-- jQuery -->
+        <script src="assets/js/jquery-2.1.0.min.js"></script>
+
+        <!-- Bootstrap -->
+        <script src="assets/js/popper.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+
+        <!-- Plugins -->
+        <script src="assets/js/scrollreveal.min.js"></script>
+        <script src="assets/js/waypoints.min.js"></script>
+        <script src="assets/js/jquery.counterup.min.js"></script>
+        <script src="assets/js/imgfix.min.js"></script>
+        <script src="assets/js/mixitup.js"></script>
+        <script src="assets/js/accordions.js"></script>
+
+        <!-- Global Init -->
+        <script src="assets/js/custom.js"></script>
+
+</body>
+
+</html>
